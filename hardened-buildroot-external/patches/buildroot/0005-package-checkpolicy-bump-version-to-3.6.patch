@@ -1,0 +1,38 @@
+From 586f5a5104363ac1140b74c7f2e9b723860be158 Mon Sep 17 00:00:00 2001
+From: Adam Duskett <adam.duskett@amarulasolutions.com>
+Date: Mon, 26 Feb 2024 13:50:54 -0700
+Subject: [PATCH 5/9] package/checkpolicy: bump version to 3.6
+
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+---
+ package/checkpolicy/checkpolicy.hash | 2 +-
+ package/checkpolicy/checkpolicy.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/checkpolicy/checkpolicy.hash b/package/checkpolicy/checkpolicy.hash
+index fcfd81c554..d2ecc7265a 100644
+--- a/package/checkpolicy/checkpolicy.hash
++++ b/package/checkpolicy/checkpolicy.hash
+@@ -1,5 +1,5 @@
+ # https://github.com/SELinuxProject/selinux/wiki/Releases
+-sha256  7aa48ab2222a0b9881111d6d7f70c3014d3d9338827d9e02df105a68c0df5dbc  checkpolicy-3.5.tar.gz
++sha256  1b346b3cdd4f8a78a157627bad64a3b3479c67b6a19d15e6d5c8694620eadbc1  checkpolicy-3.6.tar.gz
+ 
+ # Hash for license file
+ sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  LICENSE
+diff --git a/package/checkpolicy/checkpolicy.mk b/package/checkpolicy/checkpolicy.mk
+index 024d306233..109aaf6072 100644
+--- a/package/checkpolicy/checkpolicy.mk
++++ b/package/checkpolicy/checkpolicy.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CHECKPOLICY_VERSION = 3.5
++CHECKPOLICY_VERSION = 3.6
+ CHECKPOLICY_SITE = https://github.com/SELinuxProject/selinux/releases/download/$(CHECKPOLICY_VERSION)
+ CHECKPOLICY_LICENSE = GPL-2.0
+ CHECKPOLICY_LICENSE_FILES = LICENSE
+-- 
+2.43.2
+

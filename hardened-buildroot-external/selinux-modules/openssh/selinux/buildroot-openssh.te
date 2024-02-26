@@ -1,0 +1,23 @@
+policy_module(buildroot-openssh, 1.0.0)
+
+#============= sshd_t ==============
+allow sshd_t device_t:chr_file { getattr open read write };
+allow sshd_t kernel_t:fd use;
+allow sshd_t root_t:chr_file { read write };
+allow sshd_t sysadm_t:process { noatsecure rlimitinh siginh };
+allow sshd_t sysadm_t:process transition;
+allow sshd_t var_t:lnk_file read;
+
+#============= ssh_keygen_t ==============
+allow ssh_keygen_t cert_t:dir search;
+allow ssh_keygen_t cert_t:file { getattr open read };
+allow ssh_keygen_t device_t:chr_file { open read write };
+allow ssh_keygen_t kernel_t:fd use;
+allow ssh_keygen_t root_t:chr_file { getattr ioctl read write };
+allow ssh_keygen_t security_t:filesystem getattr;
+allow ssh_keygen_t selinux_config_t:dir search;
+allow ssh_keygen_t tmpfs_t:dir search;
+
+#============= restorecond_t ==============
+allow restorecond_t ssh_home_t:dir watch;
+

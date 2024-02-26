@@ -1,0 +1,38 @@
+From 6965f9983d40ef2b2597886bc98302873c9598da Mon Sep 17 00:00:00 2001
+From: Adam Duskett <adam.duskett@amarulasolutions.com>
+Date: Mon, 26 Feb 2024 13:52:23 -0700
+Subject: [PATCH 8/9] package/selinux-python: bump version to 3.6
+
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+---
+ package/selinux-python/selinux-python.hash | 2 +-
+ package/selinux-python/selinux-python.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/selinux-python/selinux-python.hash b/package/selinux-python/selinux-python.hash
+index 3592540703..96be214fd3 100644
+--- a/package/selinux-python/selinux-python.hash
++++ b/package/selinux-python/selinux-python.hash
+@@ -1,5 +1,5 @@
+ # https://github.com/SELinuxProject/selinux/wiki/Releases
+-sha256  8245bb4dae59333461f19ca0c79a829081f07972fa5e3ad4c2b2b917dd71d96b  selinux-python-3.5.tar.gz
++sha256  e2867d4cd26f9869c55216cc20ca7d10442491a0fbf256116ade99ec39426ec0  selinux-python-3.6.tar.gz
+ 
+ # Hash for license file
+ sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  LICENSE
+diff --git a/package/selinux-python/selinux-python.mk b/package/selinux-python/selinux-python.mk
+index 7505474aa4..84fc9cbc22 100644
+--- a/package/selinux-python/selinux-python.mk
++++ b/package/selinux-python/selinux-python.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SELINUX_PYTHON_VERSION = 3.5
++SELINUX_PYTHON_VERSION = 3.6
+ SELINUX_PYTHON_SITE = https://github.com/SELinuxProject/selinux/releases/download/$(SELINUX_PYTHON_VERSION)
+ SELINUX_PYTHON_LICENSE = GPL-2.0
+ SELINUX_PYTHON_LICENSE_FILES = LICENSE
+-- 
+2.43.2
+

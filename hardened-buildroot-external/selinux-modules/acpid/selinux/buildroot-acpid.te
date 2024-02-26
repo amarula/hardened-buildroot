@@ -1,0 +1,10 @@
+policy_module(buildroot-acpid, 1.0.0)
+
+#============= acpid_t ==============
+allow acpid_t device_t:chr_file { read open write ioctl };
+allow acpid_t kernel_t:fd use;
+allow acpid_t root_t:chr_file { read write open ioctl };
+allow acpid_t tmpfs_t:dir { add_name write remove_name };
+allow acpid_t tmpfs_t:file { create open write unlink };
+allow acpid_t tmpfs_t:sock_file create;
+

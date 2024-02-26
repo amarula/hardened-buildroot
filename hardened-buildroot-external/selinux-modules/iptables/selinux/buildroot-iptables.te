@@ -1,0 +1,5 @@
+policy_module(buildroot-iptables, 1.0.0)
+
+#============= iptables_t ==============
+allow iptables_t root_t:chr_file { read write };
+

@@ -1,0 +1,5 @@
+policy_module(buildroot-polkit, 1.0.0)
+
+#============= policykit_t ==============
+allow policykit_t security_t:filesystem getattr;
+allow policykit_t selinux_config_t:dir search;

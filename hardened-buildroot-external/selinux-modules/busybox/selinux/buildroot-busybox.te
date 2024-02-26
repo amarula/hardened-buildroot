@@ -1,0 +1,16 @@
+policy_module(buildroot-busybox, 1.0.0)
+
+#============= init_tmpfs_t ==============
+allow init_tmpfs_t self:file { lock open read write };
+
+#============= getty_t ==============
+allow getty_t local_login_t:file { lock open read write };
+allow getty_t local_login_t:process { noatsecure rlimitinh siginh };
+allow getty_t security_t:filesystem getattr;
+allow getty_t selinux_config_t:dir search;
+
+#============= local_login_t ==============
+allow local_login_t device_t:chr_file { getattr setattr };
+allow local_login_t shadow_t:file { getattr open read };
+allow local_login_t sysadm_t:process { noatsecure siginh rlimitinh };
+

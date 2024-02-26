@@ -1,0 +1,2 @@
+name: HARDENED_BUILDROOT
+desc: External tree to allow Buildroot to run in enforcing SELinux mode.

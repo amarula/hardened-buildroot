@@ -1,0 +1,8 @@
+policy_module(buildroot-sysvinit, 1.0.0)
+
+#============= getty_t ==============
+allow getty_t tmpfs_t:dir { add_name write };
+allow getty_t tmpfs_t:file { create lock open read write };
+
+#============= local_login_t ==============
+allow local_login_t tmpfs_t:file { lock open read write };

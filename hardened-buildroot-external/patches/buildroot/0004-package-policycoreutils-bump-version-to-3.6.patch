@@ -1,0 +1,59 @@
+From 6ff8faa6a4f2027c7aa4dfedc6e448e04a8e9159 Mon Sep 17 00:00:00 2001
+From: Adam Duskett <adam.duskett@amarulasolutions.com>
+Date: Mon, 26 Feb 2024 13:48:41 -0700
+Subject: [PATCH 4/9] package/policycoreutils: bump version to 3.6
+
+setsebool/Makefile now unconditionally links against libsepol.
+As such, it is now a new dependency.
+
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+---
+ package/policycoreutils/Config.in            | 1 +
+ package/policycoreutils/policycoreutils.hash | 2 +-
+ package/policycoreutils/policycoreutils.mk   | 4 ++--
+ 3 files changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/package/policycoreutils/Config.in b/package/policycoreutils/Config.in
+index 3201c8fede..46a367129a 100644
+--- a/package/policycoreutils/Config.in
++++ b/package/policycoreutils/Config.in
+@@ -10,6 +10,7 @@ config BR2_PACKAGE_POLICYCOREUTILS
+ 	depends on !BR2_STATIC_LIBS # libsemanage
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # libsemanage -> libselinux -> libsepol
+ 	select BR2_PACKAGE_LIBSEMANAGE
++	select BR2_PACKAGE_LIBSEPOL
+ 	select BR2_PACKAGE_LIBCAP_NG
+ 	help
+ 	  Policycoreutils is a collection of policy utilities
+diff --git a/package/policycoreutils/policycoreutils.hash b/package/policycoreutils/policycoreutils.hash
+index e29d192b13..ea45116912 100644
+--- a/package/policycoreutils/policycoreutils.hash
++++ b/package/policycoreutils/policycoreutils.hash
+@@ -1,3 +1,3 @@
+ # https://github.com/SELinuxProject/selinux/wiki/Releases
+-sha256  78453e1529fbbf800e88860094d555e781ce1fba11a7ef77b5aabb43e1173276  policycoreutils-3.5.tar.gz
++sha256  a76ac431ea40a35a83164ce9007909c1c6c12fd1056627f622144e4a705c0a2c  policycoreutils-3.6.tar.gz
+ sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  LICENSE
+diff --git a/package/policycoreutils/policycoreutils.mk b/package/policycoreutils/policycoreutils.mk
+index 61d91066d4..773cd4626b 100644
+--- a/package/policycoreutils/policycoreutils.mk
++++ b/package/policycoreutils/policycoreutils.mk
+@@ -4,13 +4,13 @@
+ #
+ ################################################################################
+ 
+-POLICYCOREUTILS_VERSION = 3.5
++POLICYCOREUTILS_VERSION = 3.6
+ POLICYCOREUTILS_SITE = https://github.com/SELinuxProject/selinux/releases/download/$(POLICYCOREUTILS_VERSION)
+ POLICYCOREUTILS_LICENSE = GPL-2.0
+ POLICYCOREUTILS_LICENSE_FILES = LICENSE
+ POLICYCOREUTILS_CPE_ID_VENDOR = selinuxproject
+ 
+-POLICYCOREUTILS_DEPENDENCIES = libsemanage libcap-ng $(TARGET_NLS_DEPENDENCIES)
++POLICYCOREUTILS_DEPENDENCIES = libsemanage libsepol libcap-ng $(TARGET_NLS_DEPENDENCIES)
+ POLICYCOREUTILS_MAKE_OPTS = LDLIBS=$(TARGET_NLS_LIBS)
+ 
+ ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
+-- 
+2.43.2
+

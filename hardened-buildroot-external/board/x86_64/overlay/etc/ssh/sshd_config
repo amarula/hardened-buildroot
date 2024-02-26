@@ -1,0 +1,10 @@
+# I am aware of the irony of having an insecure sshd_config file for a hardened
+# buildroot demo. This is for debugging purposes. Please, do not use this for
+# production code!
+
+PermitRootLogin yes
+AuthorizedKeysFile .ssh/authorized_keys
+PasswordAuthentication yes
+PermitEmptyPasswords yes
+UsePAM yes
+Subsystem sftp /usr/libexec/sftp-server

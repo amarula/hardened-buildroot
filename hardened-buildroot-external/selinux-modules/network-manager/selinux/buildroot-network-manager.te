@@ -1,0 +1,4 @@
+policy_module(buildroot-network-manager, 1.0.0)
+
+#============= NetworkManager_t ==============
+allow NetworkManager_t tmpfs_t:sock_file write;

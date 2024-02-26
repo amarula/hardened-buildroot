@@ -1,0 +1,195 @@
+From f61287390e694dc90eaebb190786aa394c7414b9 Mon Sep 17 00:00:00 2001
+From: Adam Duskett <adam.duskett@amarulasolutions.com>
+Date: Mon, 26 Feb 2024 13:47:53 -0700
+Subject: [PATCH 3/9] package/libselinux: bump version to 3.6
+
+Remove upstreamed patches
+
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+---
+ package/libselinux/0001-fix-musl-build.patch  | 38 --------------
+ ...T-and-rely-on-the-installed-file-nam.patch | 50 -------------------
+ ...inux-set-CFLAGS-for-pip-installation.patch | 43 ----------------
+ package/libselinux/libselinux.hash            |  2 +-
+ package/libselinux/libselinux.mk              |  2 +-
+ 5 files changed, 2 insertions(+), 133 deletions(-)
+ delete mode 100644 package/libselinux/0001-fix-musl-build.patch
+ delete mode 100644 package/libselinux/0002-Do-not-use-PYCEXT-and-rely-on-the-installed-file-nam.patch
+ delete mode 100644 package/libselinux/0003-libselinux-set-CFLAGS-for-pip-installation.patch
+
+diff --git a/package/libselinux/0001-fix-musl-build.patch b/package/libselinux/0001-fix-musl-build.patch
+deleted file mode 100644
+index b8b16be26f..0000000000
+--- a/package/libselinux/0001-fix-musl-build.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-From 78f7f09028fdd6a5e8e4e4b584749621eaef412f Mon Sep 17 00:00:00 2001
+-From: Yann E. MORIN" <yann.morin.1998@free.fr>
+-Date: Sat, 7 Dec 2019 17:24:50 -0800
+-Subject: [PATCH] fix undefined macros in musl
+-
+-musl does not define glibc-specific macros, so use a simple version of
+-the macro when it is not defined.
+-
+-This is very inefficient, however, but copying the code from glibc is
+-not really possible because it is LGPL while libselinux in Public
+-Domain, and we want to avoid license propagation, so this macro is
+-completely written from scratch, and non-optimal.
+-
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-[Updated for 3.5]
+-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+-diff --git a/src/booleans.c b/src/booleans.c
+-index ffa8d26..8569002 100644
+---- a/src/booleans.c
+-+++ b/src/booleans.c
+-@@ -64,6 +64,14 @@ int security_get_boolean_names(char ***names, int *len)
+- 		goto bad;
+- 	}
+- 
+-+/* Simple (but inefficient) version of _D_ALLOC_NAMLEN when
+-+ * building with a C library that misses it (e.g. musl).
+-+ * Note: glibc does a strlen on (d)->d_name, so assume it is safe.
+-+ */
+-+#ifndef _D_ALLOC_NAMLEN
+-+#define _D_ALLOC_NAMLEN(d) (strlen((d)->d_name)+1)
+-+#endif
+-+
+- 	for (i = 0; i < *len; i++) {
+- 		n[i] = strdup(namelist[i]->d_name);
+- 		if (!n[i]) {
+--- 
+-2.23.0
+-
+diff --git a/package/libselinux/0002-Do-not-use-PYCEXT-and-rely-on-the-installed-file-nam.patch b/package/libselinux/0002-Do-not-use-PYCEXT-and-rely-on-the-installed-file-nam.patch
+deleted file mode 100644
+index c744ca4069..0000000000
+--- a/package/libselinux/0002-Do-not-use-PYCEXT-and-rely-on-the-installed-file-nam.patch
++++ /dev/null
+@@ -1,50 +0,0 @@
+-From c26495025ab1a2597e5433b67a3bf793d3ce1e08 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Date: Fri, 25 Oct 2019 13:37:14 +0200
+-Subject: [PATCH] Do not use PYCEXT, and rely on the installed file name
+-
+-PYCEXT is computed by asking the Python intrepreter what is the
+-file extension used for native Python modules.
+-
+-Unfortunately, when cross-compiling, the host Python doesn't give the
+-proper result: it gives the result matching the build machine, and not
+-the target machine. Due to this, the symlink has an incorrect name,
+-and doesn't point to the .so file that was actually built/installed.
+-
+-To address this and keep things simple, this patch just changes the ln
+-invocation to rely on the name of the _selinux*.so Python module that
+-was installed.
+-
+-Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
+-[Refreshed for 3.1]
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-[Refreshed for 3.5]
+-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+----
+- src/Makefile | 3 +--
+- 1 file changed, 1 insertion(+), 2 deletions(-)
+-
+-diff --git a/src/Makefile b/src/Makefile
+-index 190016e2af34..7ee22fd35da3 100644
+---- a/src/Makefile
+-+++ b/src/Makefile
+-@@ -15,7 +15,6 @@ INCLUDEDIR ?= $(PREFIX)/include
+- PYINC ?= $(shell $(PKG_CONFIG) --cflags $(PYPREFIX))
+- PYLIBS ?= $(shell $(PKG_CONFIG) --libs $(PYPREFIX))
+- PYTHONLIBDIR ?= $(shell $(PYTHON) -c "import sysconfig; print(sysconfig.get_path('platlib', vars={'platbase': '$(PREFIX)', 'base': '$(PREFIX)'}))")
+--PYCEXT ?= $(shell $(PYTHON) -c 'import importlib.machinery;print(importlib.machinery.EXTENSION_SUFFIXES[0])')
+- RUBYINC ?= $(shell $(RUBY) -e 'puts "-I" + RbConfig::CONFIG["rubyarchhdrdir"] + " -I" + RbConfig::CONFIG["rubyhdrdir"]')
+- RUBYLIBS ?= $(shell $(RUBY) -e 'puts "-L" + RbConfig::CONFIG["libdir"] + " -L" + RbConfig::CONFIG["archlibdir"] + " " + RbConfig::CONFIG["LIBRUBYARG_SHARED"]')
+- RUBYINSTALL ?= $(shell $(RUBY) -e 'puts RbConfig::CONFIG["vendorarchdir"]')
+-@@ -189,7 +188,7 @@ install: all
+- install-pywrap: pywrap
+- 	$(PYTHON) -m pip install --prefix=$(PREFIX) `test -n "$(DESTDIR)" && echo --root $(DESTDIR) --ignore-installed --no-deps` $(PYTHON_SETUP_ARGS) .
+- 	install -m 644 $(SWIGPYOUT) $(DESTDIR)$(PYTHONLIBDIR)/selinux/__init__.py
+--	ln -sf --relative $(DESTDIR)$(PYTHONLIBDIR)/selinux/_selinux$(PYCEXT) $(DESTDIR)$(PYTHONLIBDIR)/_selinux$(PYCEXT)
+-+	ln -sf --relative $(DESTDIR)$(PYTHONLIBDIR)/selinux/_selinux*.so $(DESTDIR)$(PYTHONLIBDIR)/
+- 
+- install-rubywrap: rubywrap
+- 	test -d $(DESTDIR)$(RUBYINSTALL) || install -m 755 -d $(DESTDIR)$(RUBYINSTALL) 
+--- 
+-2.26.2
+-
+diff --git a/package/libselinux/0003-libselinux-set-CFLAGS-for-pip-installation.patch b/package/libselinux/0003-libselinux-set-CFLAGS-for-pip-installation.patch
+deleted file mode 100644
+index c08529c44f..0000000000
+--- a/package/libselinux/0003-libselinux-set-CFLAGS-for-pip-installation.patch
++++ /dev/null
+@@ -1,43 +0,0 @@
+-From c9b3cbb654ca1e834d47f52af9f170b9f38c857a Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>
+-Date: Thu, 20 Apr 2023 18:27:00 +0200
+-Subject: [PATCH] libselinux: set CFLAGS for pip installation
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-Explicitly set CFLAGS for the pip install command, similar to calling
+-setup.py, to ignore known compiler warnings treated as errors, e.g.:
+-
+-    selinuxswig_python_wrap.c:3593:19: error: 'sidget' is deprecated [-Werror,-Wdeprecated-declarations]
+-                result = (int)sidget(arg1);
+-                              ^
+-    selinuxswig_python_wrap.c:15024:1: error: no previous prototype for function 'PyInit__selinux' [-Werror,-Wmissing-prototypes]
+-            SWIG_init(void) {
+-            ^
+-
+-Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
+-Acked-by: Petr Lautrbach <lautrbach@redhat.com>
+-Upstream: https://github.com/SELinuxProject/selinux/commit/c9b3cbb654ca1e834d47f52af9f170b9f38c857a
+-[yann.morin.1998@free.fr: backport from upstream]
+-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+----
+- libselinux/src/Makefile | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/libselinux/src/Makefile b/libselinux/src/Makefile
+-index 36d57122..f9a1e5f5 100644
+---- a/src/Makefile
+-+++ b/src/Makefile
+-@@ -187,7 +187,7 @@ install: all
+- 	ln -sf --relative $(DESTDIR)$(SHLIBDIR)/$(LIBSO) $(DESTDIR)$(LIBDIR)/$(TARGET)
+- 
+- install-pywrap: pywrap
+--	$(PYTHON) -m pip install --prefix=$(PREFIX) `test -n "$(DESTDIR)" && echo --root $(DESTDIR) --ignore-installed --no-deps` $(PYTHON_SETUP_ARGS) .
+-+	CFLAGS="$(CFLAGS) $(SWIG_CFLAGS)" $(PYTHON) -m pip install --prefix=$(PREFIX) `test -n "$(DESTDIR)" && echo --root $(DESTDIR) --ignore-installed --no-deps` $(PYTHON_SETUP_ARGS) .
+- 	install -m 644 $(SWIGPYOUT) $(DESTDIR)$(PYTHONLIBDIR)/selinux/__init__.py
+- 	ln -sf --relative $(DESTDIR)$(PYTHONLIBDIR)/selinux/_selinux$(PYCEXT) $(DESTDIR)$(PYTHONLIBDIR)/_selinux$(PYCEXT)
+- 
+--- 
+-2.25.1
+-
+diff --git a/package/libselinux/libselinux.hash b/package/libselinux/libselinux.hash
+index 14bc627a80..4e0a2ca317 100644
+--- a/package/libselinux/libselinux.hash
++++ b/package/libselinux/libselinux.hash
+@@ -1,5 +1,5 @@
+ # From: https://github.com/SELinuxProject/selinux/wiki/Releases
+-sha256  9a3a3705ac13a2ccca2de6d652b6356fead10f36fb33115c185c5ccdf29eec19  libselinux-3.5.tar.gz
++sha256  ba4e0ef34b270e7672a5e5f1b523fe2beab3a40bb33d9389f4ad3a8728f21b52  libselinux-3.6.tar.gz
+ 
+ # Hash for license file
+ sha256  86657b4c0fe868d7cbd977cb04c63b6c667e08fa51595a7bc846ad4bed8fc364  LICENSE
+diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
+index 601038e46f..97671f1cca 100644
+--- a/package/libselinux/libselinux.mk
++++ b/package/libselinux/libselinux.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBSELINUX_VERSION = 3.5
++LIBSELINUX_VERSION = 3.6
+ LIBSELINUX_SITE = https://github.com/SELinuxProject/selinux/releases/download/$(LIBSELINUX_VERSION)
+ LIBSELINUX_LICENSE = Public Domain
+ LIBSELINUX_LICENSE_FILES = LICENSE
+-- 
+2.43.2
+

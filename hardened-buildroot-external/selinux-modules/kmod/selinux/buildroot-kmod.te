@@ -1,0 +1,4 @@
+policy_module(buildroot-kmod, 1.0.0)
+
+#============= kmod_t ==============
+allow kmod_t proc_t:filesystem getattr;

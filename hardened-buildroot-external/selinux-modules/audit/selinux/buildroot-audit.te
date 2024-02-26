@@ -1,0 +1,13 @@
+policy_module(buildroot-audit, 1.0.0)
+
+#============= auditd_t ==============
+allow auditd_t auditd_etc_t:file map;
+allow auditd_t device_t:chr_file { open read write };
+allow auditd_t kernel_t:fd use;
+allow auditd_t root_t:chr_file { read write };
+allow auditd_t selinux_config_t:dir search;
+allow auditd_t tmpfs_t:dir { remove_name add_name search write };
+allow auditd_t tmpfs_t:file { create open write unlink };
+allow auditd_t tmp_t:dir { add_name getattr open read search setattr write };
+allow auditd_t tmp_t:file { append create setattr getattr read open };
+allow auditd_t var_t:lnk_file read;

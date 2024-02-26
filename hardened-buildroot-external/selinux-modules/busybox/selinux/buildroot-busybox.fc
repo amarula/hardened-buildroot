@@ -1,0 +1,1 @@
+/lib/libbusybox*	--	gen_context(system_u:object_r:lib_t,s0)

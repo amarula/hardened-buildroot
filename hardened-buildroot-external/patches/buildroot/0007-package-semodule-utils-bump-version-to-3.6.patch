@@ -1,0 +1,38 @@
+From e384851c95519f8cb81b3351d6ea82b5e2ceb882 Mon Sep 17 00:00:00 2001
+From: Adam Duskett <adam.duskett@amarulasolutions.com>
+Date: Mon, 26 Feb 2024 13:51:52 -0700
+Subject: [PATCH 7/9] package/semodule-utils: bump version to 3.6
+
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+---
+ package/semodule-utils/semodule-utils.hash | 2 +-
+ package/semodule-utils/semodule-utils.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/semodule-utils/semodule-utils.hash b/package/semodule-utils/semodule-utils.hash
+index ac3357d3fa..5e7d698f3b 100644
+--- a/package/semodule-utils/semodule-utils.hash
++++ b/package/semodule-utils/semodule-utils.hash
+@@ -1,5 +1,5 @@
+ # https://github.com/SELinuxProject/selinux/wiki/Releases
+-sha256  c9a550a737051ebaf2c102f665c7ec2f85e7232870980aa0067998459b414283  semodule-utils-3.5.tar.gz
++sha256  eedb88f2b2124e538f2d614be063c0d9ac3eacc0c51a4da44500ca1ed1ba16f4  semodule-utils-3.6.tar.gz
+ 
+ # Hash for license file
+ sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  LICENSE
+diff --git a/package/semodule-utils/semodule-utils.mk b/package/semodule-utils/semodule-utils.mk
+index 9a0f084128..b58f7535f1 100644
+--- a/package/semodule-utils/semodule-utils.mk
++++ b/package/semodule-utils/semodule-utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SEMODULE_UTILS_VERSION = 3.5
++SEMODULE_UTILS_VERSION = 3.6
+ SEMODULE_UTILS_SITE = https://github.com/SELinuxProject/selinux/releases/download/$(SEMODULE_UTILS_VERSION)
+ SEMODULE_UTILS_LICENSE = GPL-2.0
+ SEMODULE_UTILS_LICENSE_FILES = LICENSE
+-- 
+2.43.2
+

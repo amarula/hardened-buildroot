@@ -1,0 +1,13 @@
+policy_module(buildroot-restorecond, 1.0.0)
+
+#============= restorecond_t ==============
+allow restorecond_t device_t:chr_file { open read write };
+allow restorecond_t etc_t:dir watch;
+allow restorecond_t file_context_t:file { open read };
+allow restorecond_t selinux_config_t:file watch;
+allow restorecond_t tmpfs_t:dir { remove_name write watch };
+allow restorecond_t tmpfs_t:file { append getattr open lock read write unlink };
+allow restorecond_t user_home_dir_t:dir watch;
+allow restorecond_t var_log_t:dir watch;
+allow restorecond_t var_run_t:dir watch;
+allow restorecond_t var_t:dir watch;
